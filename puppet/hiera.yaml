@@ -1,0 +1,24 @@
+---
+version: 5
+defaults:
+  datadir: /var/psoft/share/dpk/puppet/production/data
+  data_hash: yaml_data  # Use the built-in YAML backend.
+
+hierarchy:
+  - name: "defaults"
+    path: defaults.yaml
+
+  - name: "customization"
+    path: psft_customizations.yaml
+
+  - name: "unix"
+    path: psft_unix_system.yaml
+
+  - name: "deployment"
+    path: psft_deployment.yaml
+
+  - name: "config"
+    path: psft_configuration.yaml
+
+  - name: "patches"
+    path: psft_patches.yaml
