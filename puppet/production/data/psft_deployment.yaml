@@ -1,0 +1,62 @@
+---
+peoplesoft_base: /opt/oracle/psft
+
+dpk_location:     /opt/oracle/psft/dpk
+archive_location: "%{hiera('dpk_location')}/archives"
+pt_location:      "%{hiera('peoplesoft_base')}/pt"
+db_location:      "%{hiera('peoplesoft_base')}/db"
+db_platform:      ORACLE
+setup_ohs:        false
+
+unicode_db:       true
+db_type:          DEMO
+install_type:     PUM
+
+ps_home_location:       "%{hiera('pt_location')}/ps_home8.56.06"
+inventory_location:     "%{hiera('db_location')}/oraInventory"
+oracle_server_location: "%{hiera('db_location')}/oracle-server/12.1.0.2"
+jdk_location:           "%{hiera('pt_location')}/jdk1.8.0_144"
+weblogic_location:      "%{hiera('pt_location')}/bea"
+tuxedo_location:        "%{hiera('pt_location')}/bea/tuxedo"
+ohs_location:           "%{hiera('pt_location')}/bea/ohs"
+
+ps_home:
+  db_type:    "%{hiera('db_platform')}"
+  unicode_db: "%{hiera('unicode_db')}"
+  location:   "%{hiera('ps_home_location')}"
+
+inventory:
+  location: "%{hiera('inventory_location')}"
+
+oracle_server:
+  listener_name: psft_listener
+  listener_port: "%{hiera('db_port')}"
+  location: "%{hiera('oracle_server_location')}"
+
+jdk:
+  location: "%{hiera('jdk_location')}"
+
+weblogic:
+  location: "%{hiera('weblogic_location')}"
+
+tuxedo:
+  location: "%{hiera('tuxedo_location')}"
+
+ohs:
+  location: "%{hiera('ohs_location')}"
+
+
+psft_db_location: "%{hiera('db_location')}/oradata/%{hiera('db_name')}"
+psft_db:
+  type: fscm
+  location: "%{hiera('psft_db_location')}"
+
+
+ps_apphome_location: "%{hiera('pt_location')}/fscm_app_home"
+ps_app_home:
+  db_type: "%{hiera('db_platform')}"
+  include_ml_files: true
+  location: "%{hiera('ps_apphome_location')}"
+pi_home_location: "%{hiera('pt_location')}/fscm_pi_home"
+pi_home:
+  location: "%{hiera('pi_home_location')}"

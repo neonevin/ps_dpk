@@ -1,0 +1,270 @@
+---
+opc_user_name:      <OPC_USER_NAME>
+opc_user_pwd:       <OPC_USER_PWD>
+mos_user_name:      <MOS_USER_NAME>
+mos_user_pwd:       <MOS_USER_PWD>
+fileserver_size:      50GB
+fileserver_image_name:  <FS_IMAGE_NAME>
+opc_domain_name:      <OPC_DOMAIN_NAME>
+compute_rest_end_point:      <OPC_COMPUTE_REST_END_POINT>
+dbaas_rest_end_point:      <OPC_DBAAS_REST_END_POINT>
+fileserver_mount_path:    /cm_psft_dpks
+fileserver_hostname:      cloudmanagerfs
+fileserver_boot_volume_size:  30
+fileserver_dpk_path:  /u01/app/oracle/product
+fileserver_creation:   true
+patch_cloud_manager:   true
+ssh_passphrase: 'password'
+cloud_home:         "%{hiera('user_home_dir')}/%{hiera('domain_user')}/psft/data/cloud"
+cm_instance_name:    "CLOUD_MANAGER_INSTANCE"
+webserver_admin_user_pwd: "WEBSERVER_ADMIN_PWD"
+profile_user_pwd: "WEBPROFILE_USER_PWD"
+cm_hostname:      "%{::fqdn}"
+
+
+cloud_manager_settings:
+  os_user:            "%{hiera('domain_user')}"
+  ps_cfg_home_dir:    "%{hiera('ps_config_home')}"
+  opc_user_name:      "%{hiera('opc_user_name')}"
+  opc_domain_name:      "%{hiera('opc_domain_name')}"
+
+cloud_manager_patch_settings:
+    ps_app_home_jars:
+      patch_type:         "file"
+      os_user:            "%{hiera('psft_app_install_user_name')}"
+      patch_mode:         0755
+      patch_source:       "%{hiera('dpk_location')}/hotfix/cloud_manager_patch/ps_app_home_jars/."
+      patch_target:       "%{hiera('ps_apphome_location')}/appserv/classes/"
+      
+    ps_app_home_cloud:
+      patch_type:         "file"
+      os_user:            "%{hiera('psft_app_install_user_name')}"
+      patch_mode:         0755
+      patch_source:       "%{hiera('dpk_location')}/hotfix/cloud_manager_patch/ps_app_home_cloud/."
+      patch_target:       "%{hiera('ps_apphome_location')}/cloud/"
+      
+    ps_home_jars:
+      patch_type:         "file"
+      os_user:            "%{hiera('psft_install_user_name')}"
+      patch_mode:         0755
+      patch_source:       "%{hiera('dpk_location')}/hotfix/cloud_manager_patch/ps_home_jars/."
+      patch_target:       "%{hiera('ps_home_location')}/appserv/classes/"
+      
+component_preboot_cm_setup_list:
+  cm_opc_user:
+    run_control_id:                       cm_opc_user
+    program_id:                           'ECL_CM:ACM'
+    os_user:                              "%{hiera('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{hiera('db_name')}"
+      db_type:                            "%{hiera('db_platform')}"
+      db_opr_id:                          "%{hiera('db_user')}"
+      db_opr_pwd:                         "%{hiera('db_user_pwd')}"
+      db_connect_id:                      "%{hiera('db_connect_id')}"
+      db_connect_pwd:                     "%{hiera('db_connect_pwd')}"
+
+    acm_plugin_list:
+      PSECLGlobalProfileCreation_0:
+        env.ecl_opc_global_profile_name:   "_CM_GLOBAL_"
+        plugin.name: 'ECL_CM:ACM:PSECLGlobalProfileCreation'
+
+      PSECLGlobalProfileCreation_1:
+        env.ecl_opc_global_profile_name:  "%{hiera('cm_instance_name')}"
+        plugin.name: 'ECL_CM:ACM:PSECLGlobalProfileCreation'
+
+      PSECLUserDetails:
+        env.ecl_opc_domain:                 "%{hiera('opc_domain_name')}"
+        env.ecl_opc_user:                   "%{hiera('opc_user_name')}"
+        env.ecl_opc_password:               "%{hiera('opc_user_pwd')}"
+        env.ecl_opc_user_active_flag:       Y
+
+      PSECLDomainDetails:
+        env.ecl_opc_service:                Compute
+        env.ecl_opc_resturl:                "%{hiera('compute_rest_end_point')}"
+        env.ecl_opc_domain:                 "%{hiera('opc_domain_name')}"
+        env.ecl_opc_domain_active_flag:     Y
+
+      PSECLPRCSDaemonGroup:
+        env.ecl_opc_prcs_daemon_group:      CM
+        env.ecl_opc_prcs_daemon_program_name: ECL_SCHEDULE
+
+      PSECLRepositoryStore:
+        env.ecl_repository_type:            FS
+        env.ecl_repository_name:            local
+        env.ecl_repository_acc_ep:          "%{hiera('fileserver_mount_path')}"
+
+      PSECLCMUpdate:
+        env.cdm_prodcode:                   13402
+        env.cdm_isopc:                      Y
+        env.cdm_isbaremetal:                N 
+
+      PSECLLockUserAccount:
+        env.ecl_opc_access_user_list:       "%{hiera('db_user')},PTWEBSERVER"
+
+    acm_plugin_order:
+      - PSECLGlobalProfileCreation_0
+      - PSECLGlobalProfileCreation_1
+      - PSECLUserDetails
+      - PSECLDomainDetails
+      - PSECLPRCSDaemonGroup
+      - PSECLRepositoryStore
+      - PSECLCMUpdate
+      - PSECLLockUserAccount
+         
+  cm_prcs:
+    run_control_id:                       cm_prcs
+    program_id:                           'PTEM_CONFIG'
+    os_user:                              "%{hiera('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{hiera('db_name')}"
+      db_type:                            "%{hiera('db_platform')}"
+      db_opr_id:                          "%{hiera('db_user')}"
+      db_opr_pwd:                         "%{hiera('db_user_pwd')}"
+      db_connect_id:                      "%{hiera('db_connect_id')}"
+      db_connect_pwd:                     "%{hiera('db_connect_pwd')}"
+
+    acm_plugin_list:
+      PTProcessSchedulerServerConfig:
+        env.servername:                     "%{hiera('prcs_domain_id')}"
+        env.heartbeat:                    60
+        env.sleeptime:                    15
+        env.distid:                       ACM Administrator
+        env.distidtype:                   3
+        env.prcstype:                     'Application Engine,Data Mover,Optimization Engine,SQR Process,SQR Report,COBOL SQL,XML Publisher,nVision-Report,nVision-ReportBook,PSJob'
+        env.prcscategory:                 Default,LOADCACHE
+        env.processtypepriority:          '5,5,5,5,5,5,5,5,5,5'
+        env.processtypemaxconcurrent:     '3,1,2,3,3,3,3,5,5,5'
+        env.maxconcurrent:                '5,2'
+        env.prcspriority:                 '5,5'
+        env.descr:                        Server Configured via ACM
+        env.transfermaxretry:             3
+        env.daemonprcsinst:               0
+        env.maxapiaware:                  5
+        env.transferinterval:             60
+        env.transferlogfiles:             1
+        env.daemonsleeptime:              0
+        env.daemoncyclecnt:               0
+        env.srvloadbaloptn:               1
+        env.redistwrkoption:              2
+        env.start_hours:                  '0,0,0,0,0,0,0'
+        env.start_minutes:                '0,0,0,0,0,0,0'
+        env.day_ofweek:                   '0,1,2,3,4,5,6'
+        env.end_hours:                    '23,23,23,23,23,23,23'
+        env.end_minutes:                  '59,59,59,59,59,59,59'
+        env.opsys:                         4
+        env.daemonenabled:                  1
+        env.daemongroup:                    CM
+        env.daemoncyclecnt:                 0
+
+      PTIBActivateLocalServices:
+        env.activate_service:       ECL_DM,ECL_EM,ECL_EVENT
+
+  cm_repository:
+    run_control_id:                       cm_repository
+    program_id:                           'ECL_CM:ACM'
+    os_user:                              "%{hiera('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{hiera('db_name')}"
+      db_type:                            "%{hiera('db_platform')}"
+      db_opr_id:                          "%{hiera('db_user')}"
+      db_opr_pwd:                         "%{hiera('db_user_pwd')}"
+      db_connect_id:                      "%{hiera('db_connect_id')}"
+      db_connect_pwd:                     "%{hiera('db_connect_pwd')}"
+
+    acm_plugin_list:
+      PSECLPRCSServerUpdate:
+        env.ecl_opc_prcs_server_name:       "%{hiera('prcs_domain_id')}"
+
+      PSECLRepositoryStore:
+        env.ecl_repository_type:            MOS
+        env.ecl_repository_name:            mos
+        env.ecl_repository_acc_ep:          https://updates.oracle.com
+        env.ecl_repository_userid:          "%{hiera('mos_user_name')}" 
+        env.ecl_repository_password:        "%{hiera('mos_user_pwd')}"
+        env.ecl_repository_repo_mos_licid:  1400
+
+      PSECLDomainDetails:
+        env.ecl_opc_service:                DBaaS
+        env.ecl_opc_resturl:                "%{hiera('dbaas_rest_end_point')}"
+        env.ecl_opc_domain:                 "%{hiera('opc_domain_name')}"
+        env.ecl_opc_domain_active_flag:     Y
+
+      PSECLCallbackUserDetails:
+        env.ecl_opc_agent_user:             "%{hiera('db_user')}"
+        env.ecl_opc_agent_password:         "%{hiera('db_user_pwd')}"
+        env.ecl_opc_event_url:              DYNAMIC
+
+      PSECLFileServerProperties:
+        env.ecl_opc_fileserver_key_group:   PCA
+        env.ecl_opc_fileserver_key_name:    repository-deployment
+        env.ecl_opc_fileserver_key_value:   remote
+
+      PSECLManageHomePage:
+        env.ecl_repository_type:            MOS
+
+component_preboot_cm_setup_order:
+  - cm_opc_user
+  - cm_prcs
+  - cm_repository
+
+component_preboot_cm_cleanup_list:
+  cm_opc_user_cleanup:
+    run_control_id:                       cm_opc_user_cleanup
+    program_id:                           'ECL_CM:ACM'
+    os_user:                              "%{hiera('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{hiera('db_name')}"
+      db_type:                            "%{hiera('db_platform')}"
+      db_opr_id:                          "%{hiera('db_user')}"
+      db_opr_pwd:                         "%{hiera('db_user_pwd')}"
+      db_connect_id:                      "%{hiera('db_connect_id')}"
+      db_connect_pwd:                     "%{hiera('db_connect_pwd')}"
+
+    acm_plugin_list:
+      PSECLGlobalProfileDeletion_0:
+        env.ecl_opc_global_profile_name:   "_CM_GLOBAL_"
+        plugin.name: 'ECL_CM:ACM:PSECLGlobalProfileDeletion'
+
+      PSECLGlobalProfileDeletion_1:
+        env.ecl_opc_global_profile_name:  "%{hiera('cm_instance_name')}"
+        plugin.name: 'ECL_CM:ACM:PSECLGlobalProfileDeletion'
+
+
+component_postboot_cm_setup_list:
+  cm_update:
+    run_control_id:                       cm_update
+    program_id:                           'ECL_CM:ACM'
+    os_user:                              "%{hiera('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{hiera('db_name')}"
+      db_type:                            "%{hiera('db_platform')}"
+      db_opr_id:                          "%{hiera('db_user')}"
+      db_opr_pwd:                         "%{hiera('db_user_pwd')}"
+      db_connect_id:                      "%{hiera('db_connect_id')}"
+      db_connect_pwd:                     "%{hiera('db_connect_pwd')}"
+
+    acm_plugin_list:
+
+      PSECLEditConfiguration:
+        env.ecl_opc_category:   "instance_1"
+        env.ecl_opc_param_name: 'hostname,psft_base,pi_image,db_name,db_port,opr_pwd,connect_pwd,access_id,access_pwd,pia_http_port,pia_https_port,wsl_port,jolt_port,weblogic_admin_pwd,webprofile_user_pwd,gw_admin_user_pwd,db_service_name,admin_pwd'
+        env.ecl_opc_param_val_pass:  "%{hiera('cm_hostname')},%{hiera('peoplesoft_base')}/,10,%{hiera('db_name')},%{hiera('db_port')},%{hiera('db_user_pwd')},%{hiera('db_connect_pwd')},%{hiera('access_id')},%{hiera('access_pwd')},%{hiera('pia_http_port')},%{hiera('pia_https_port')},%{hiera('wsl_port')},%{hiera('jolt_port')},%{hiera('webserver_admin_user_pwd')},%{hiera('profile_user_pwd')},%{hiera('pia_gateway_user_pwd')},%{hiera('db_service_name')},%{hiera('db_admin_pwd')}"
+        env.ecl_opc_global_profile_name:  "%{hiera('cm_instance_name')}"
+        env.ecl_opc_env_name:   "%{hiera('cm_instance_name')}"
+        env.ecl_opc_env_owner:  "%{hiera('opc_user_name')}"
+        env.ecl_opc_app_home:   "%{hiera('ps_apphome_location')}/"
+        env.ecl_opc_prcs_domain_home: "%{hiera('ps_config_home')}/appserv/prcs/%{hiera('prcs_domain_name')}/"
+        env.ecl_opc_user_pwd:     "%{hiera('opc_user_pwd')}"
+        env.ecl_opc_user_name:    "%{hiera('opc_user_name')}"
+        env.ecl_opc_compute_rest_endpoint:  "%{hiera('compute_rest_end_point')}"
+        env.ecl_opc_dbaas_rest_endpoint:  "%{hiera('dbaas_rest_end_point')}"
+        env.ecl_opc_domain_name:    "%{hiera('opc_domain_name')}"
+        env.ecl_opc_user_id:        "%{hiera('opc_user_name')}"
+        env.ecl_opc_container_name:   "compute_images"
+        env.ecl_opc_provider_name:  "OPC"
+

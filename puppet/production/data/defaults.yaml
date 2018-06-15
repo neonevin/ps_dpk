@@ -1,0 +1,5 @@
+---
+ensure: present
+env_type: midtier
+tools_version: 8.56.08
+domain_type: all

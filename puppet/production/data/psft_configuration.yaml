@@ -1,0 +1,337 @@
+---
+db_name:           EP92U027
+db_user:           VP1
+db_user_pwd:       ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEAjfW3x6EA1tyf/IwHobw5X4pZbnclleF048kJSl+1q2cdj48attlt8ZgNZrYilRfTZBlgnMFcTRZtRJH3rZRL1X78qjXnlW5iRKLIdRkl8UgG3sHTe7pQMF7rlHuIQ3mvEmHVJETspewxa0rO2rjcXDxDUn0xilCN4jJqjld6p80oJI5q+TzAutH2qa4+qaVaRkhd9oWxmdWiBHVEkDIcSsDRwguiwiCQSLQZL+IBLMetkbbFmFa3K6QbkHhW/2VqqiOJ138UyRl9KxoqvoHkGMTnQekUJHztgTkEsfbVXDBJ4VjGS3+iTRDbW6ptUwwsUoedFZ2JSM8UVUVW+dssFDA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBAO7e1XlIcR9bB8egCGTNE7gBDAZ//uFxeCQAi0IglxVV9C]
+
+db_connect_id:     people
+db_connect_pwd:    ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEAMAfbQZUwcbUSwBsZ3y+O0lzVc7K+D+RZpI51HDYUaksusIZsxAVnk726kODw5cXL3zSip802AqETx36NOpFKVHue4dIuZh5zdefgEwOKdYC6TaxUnOumrtja0Hf2/lUeuuBOrHsAlNBtcGUV9HFnkX4lWdKHG57BU+EcSnlf628srrHzva0ocsQ6rl0M3HRN0//PDgwGGFbBeDQfM0gjoX2wHTkbSW87HI0xuT8+Vm1bkYlwNzCE3ndU42GQYkcvbzP973MF0G5F61zIhQCrBsyYJCF2t++0aP8hBsYNrSweddtgbDSItTeXokL+KsrvvgkkhOJhFRBK7sZzJJi/DzA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBD5Eouxe2l3czrp4H0rX7gYgBDbRUn9i/Z+x9b3ockCSFvj]
+
+change_password:          true
+access_id:          SYSADM
+access_pwd:          ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEACXYu/3+ua4ZS83v27FjSRdnnysCqvcifTeov/GRZcBE9SeSwCivcdRB8H4ljG0AxPHyY0XD6bfo7xG4YhzQ/fbDS+EYRUF9y7cDJ0cGIgVp5MGlHAIfPIc/zsvU+6RjxplENN+j6ZhUwTeYim9qluhoRcBiqUkFgiLSKhCcDV2kRNRFdAw5//9SfHB2g7CUbY7ge5GnSLVcMlxA+sEn8BCgOphkqUO/9Bg4woMvTqGnxUyiMeKk9VJTR9+OwlxZGL8iaH01b9ftEWlAZkiuA4+165CMeztf8shu+ox64lSD074O2HCIQGMeMqIMcFGTsUvanzw3ytd+Z3xqCXOnu8jA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBCTl1Sz1PYnhuyByqwb1Eg/gBD1Vsp3g7jkmonVhJxKH53Y]
+db_admin_pwd:          ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEARhTl1LkG6oDpDDRJ+S9wCwuLfc2UJnN4H4q4CVzi6ROlV5N1qrg0MdALEa1KAYDmsY+taQU6TQzp8jwxVDfstJ+UQuTDAX1w7H5+jPazFSraGkVDO9CnblLWQPxMfUrZKOKccQh5LbpqgkhGAQ+S2nqF6m7+QY70mjzds+wq6+OqjU6U3wR9UUskSlMsMJp1HMCLzrgt5b8WPsiXLiylmMRR8vGIzr4P/zXmzIHseZFk5dHpfqSP9IJumO1JRaoViz+6zIfekpm7w/BTE4rGQgOfeqLlpyQOI5h5rpqgSZYs95z1Uc7vz6ZNCn99HD4sV1mhSWyK++vk8L3qp80tPTA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBAbIYWzGK+VmlGxpdLDr1zbgBCc36qqQWLPTM5UX+Y7KthV]
+
+domain_user:           "%{hiera('psft_runtime_user_name')}"
+ps_config_home:        "%{hiera('user_home_dir')}/%{hiera('domain_user')}/psft/pt/8.56"
+appserver_template:    small
+appserver_domain_name: APPDOM
+prcs_domain_name:      PRCSDOM
+prcs_domain_id:        "PRCS%{::rand}"
+report_node_name:      "%{hiera('prcs_domain_id')}"
+pia_domain_name:       peoplesoft
+pia_site_name:         ps
+pia_http_port: 8000
+pia_https_port: 8443
+jolt_port: 9033
+wsl_port: 7000
+db_port: 1521
+gateway_node_name:     PSFT_EP
+pia_gateway_user:      administrator
+pia_gateway_user_pwd:  ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEAbF4Jr5aG25ThRevMPQWT00+xN98/Y0fvOxjzj50Q8/PT6qp3b0JKu0/b0lY+scUFe+3ANNqK5MUgJkWxj8/mskLzsR0J858OF4Ljcju93nD2UiDsD9wrcXGIUYqb5XDLPLEpdmcHSHKnsI6BpWhuwnGTfAcLAeCj0MOOsUBIQJ8EgNyWjJpJKJtv2BC7arp82D2lYjJePbHODbqhOoe6mdUynXY1tSFLjeKbkwVLUrEQCYkbq8lCDN+fa1IDyHBPlCvlN1HJAFG7cpNzWW2x61eGt7jfAeS6SVz5RZ59Qp5c3UvDS6rd4bWBiSXAtsZo6KjGK5sSKZMErXM/e3CReTA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBD4ITI5IPa0p/qXmfm1wviYgBD+qqJTkFXRK/u/fnqdoEE+]
+webserver_type:        weblogic
+pia_webprofile_name:   PROD
+pia_psserver_list:     "%{::fqdn}:%{hiera('jolt_port')}"
+report_repository_dir: "%{hiera('ps_config_home')}/psreports"
+
+domain_conn_pwd:       
+pia_host_name:         "%{::fqdn}"
+db_host_name:          "%{::fqdn}"
+db_is_rac:             false
+db_service_name:       EP92U027
+help_uri:              fscm92pbr6
+tns_dir:               "%{hiera('db_location')}"
+tns_admin_list:
+  "%{hiera('db_name')}":
+    db_host:         "%{hiera('db_host_name')}"
+    db_port:         "%{hiera('db_port')}"
+    db_protocol:     TCP
+    db_service_name: "%{hiera('db_service_name')}"
+
+db2_server_list:
+  "%{hiera('db_name')}":
+    db2_type:        "%{hiera('db_platform')}"
+    db2_host:        "%{::fqdn}"
+    db2_port:        "%{hiera('db_port')}"
+    db2_node:        TCPLNX01
+    db2_target_db:   "%{hiera('db_name')}"
+
+mssql_server_list:
+  "%{hiera('db_name')}":
+    mss_server_name: "%{::fqdn}"
+    mss_odbc_name:   "ODBC Driver 11 for SQL Server"
+
+appserver_domain_list:
+  "%{hiera('appserver_domain_name')}":
+    os_user:         "%{hiera('domain_user')}"
+    ps_cfg_home_dir: "%{hiera('ps_config_home')}"
+    template_type:   "%{hiera('appserver_template')}"
+
+    db_settings:
+      db_name:        "%{hiera('db_name')}"
+      db_type:        "%{hiera('db_platform')}"
+      db_opr_id:      "%{hiera('db_user')}"
+      db_opr_pwd:     "%{hiera('db_user_pwd')}"
+      db_connect_id:  "%{hiera('db_connect_id')}"
+      db_connect_pwd: "%{hiera('db_connect_pwd')}"
+
+    config_settings:
+      Domain Settings/Domain ID:    "%{hiera('appserver_domain_name')}"
+      PSAPPSRV/Min Instances:       2
+      PSAPPSRV/Max Instances:       2
+      PSAPPSRV/Max Fetch Size:      15000
+      Security/DomainConnectionPwd: "%{hiera('domain_conn_pwd')}"
+      JOLT Listener/Port:           "%{hiera('jolt_port')}"
+      JOLT Listener/Address:        0.0.0.0
+      Workstation Listener/Port:    "%{hiera('wsl_port')}"
+
+    feature_settings:
+      PUBSUB:        "Yes"
+      QUICKSRV:      "No"
+      QUERYSRV:      "No"
+      JOLT:          "Yes"
+      JRAD:          "No"
+      WSL:           "Yes"
+      DBGSRV:        "No"
+      RENSRV:        "No"
+      MCF:           "No"
+      PPM:           "Yes"
+      PSPPMSRV:      "Yes"
+      ANALYTICSRV:   "No"
+      SERVER_EVENTS: "Yes"
+      DOMAIN_GW:     "No"
+
+prcs_domain_list:
+  "%{hiera('prcs_domain_name')}":
+    os_user:         "%{hiera('domain_user')}"
+    ps_cfg_home_dir: "%{hiera('ps_config_home')}"
+
+    db_settings:
+      db_name:        "%{hiera('db_name')}"
+      db_type:        "%{hiera('db_platform')}"
+      db_opr_id:      "%{hiera('db_user')}"
+      db_opr_pwd:     "%{hiera('db_user_pwd')}"
+      db_connect_id:  "%{hiera('db_connect_id')}"
+      db_connect_pwd: "%{hiera('db_connect_pwd')}"
+
+    config_settings:
+      Process Scheduler/PrcsServerName: "%{hiera('prcs_domain_id')}"
+      Security/DomainConnectionPwd:     "%{hiera('domain_conn_pwd')}"
+
+    feature_settings:
+      MSTRSRV:      "Yes"
+      APPENG:       "Yes"
+
+pia_domain_list:
+  "%{hiera('pia_domain_name')}":
+    os_user:               "%{hiera('domain_user')}"
+    ps_cfg_home_dir:       "%{hiera('ps_config_home')}"
+    gateway_user:          "%{hiera('pia_gateway_user')}"
+    gateway_user_pwd:      "%{hiera('pia_gateway_user_pwd')}"
+    auth_token_domain:     ".%{::domain}"
+
+    webserver_settings:
+      webserver_type:           "%{hiera('webserver_type')}"
+      webserver_home:           "%{hiera('weblogic_location')}"
+      webserver_admin_user:     system
+      webserver_admin_user_pwd: ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEASKv6kbCG/ASLb+rfDOc2ibHIgr6iqozsQeCMjp1yzF9c+exAm7Bckugbe2l+XYjpPuyqpdicWpGOU5DOHT9BjXBTZnJEtBxKnmv18rUhKHWTuw0bRJN6cXqBZJv3kXqWsvqjFmcU3Qp4Yp2WKOBUBZjy6CZAZ0IfA+UgSwIuNAO609PTmt1Q/AIReFJt+ejTIzp2RhouJCGZVeU4qTtSKoqK58YFxyZ4UkBVbH5TcuDi/B4LXAb/2/3We58C2rMuwQovYyjqs+SMl5Yax7OLxqtEUk45HNox49PnEoQLIrAoI86NhEWdymTLboBdNNc0ePexSy3r5aRETUzfJAMsCTA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBDN4+zMD4LKPItlG0TBsUk6gBAN3v9tRRcRHm7Ym2DiGGmm]
+      webserver_admin_port:     "%{hiera('pia_http_port')}"
+      webserver_http_port:      "%{hiera('pia_http_port')}"
+      webserver_https_port:     "%{hiera('pia_https_port')}"
+
+    site_list:
+      "%{hiera('pia_site_name')}":
+        appserver_connections: "%{hiera('pia_psserver_list')}"
+        domain_conn_pwd:       "%{hiera('domain_conn_pwd')}"
+
+        webprofile_settings:
+          profile_name:        "%{hiera('pia_webprofile_name')}"
+          profile_user:        PTWEBSERVER
+          profile_user_pwd:    ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEAZv9rTDhfjNhglie5fZuMN0n9t7rENmXwR6iz5itJhPwFkiVJohVrBj/YU0/h+eONS+1SbXHSx3pHDHkJBwCow1VGAvi8Yz5x1n3bvgR9czw0O31szxCUvOJ+QYiZjOIKU3PdH9yeUX0NJNLYFULvsMF4yDpEgWslqH/MYuAqIwPmyHn/jtBBQ7ugDW9Efm8kTOxap7ZlSCmJWi6vXaiJqX81s+XCLU2QZXWDrUxl0dq9QtjfrcGhTW/d2vZ+Uefct4dn4LzAX34RoQt5xQOEojvDOjrNsh3Mb2tHZHyLDxsMqCL0Sd0X7zj3cG7o5cuyYYfW5soadVvN2vReQsz+NTA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBBnWwEo4/6QftOaYvIMAhZ7gBBb3sPxov2Vu35l6TKYw0Px]
+
+        report_repository_dir: "%{hiera('report_repository_dir')}"
+
+ohs_domain:
+    name:                       ohsdom
+    os_user:                    "%{hiera('domain_user')}"
+    domain_home_dir:            "%{hiera('ps_config_home')}"
+    pia_webserver_type:         "%{hiera('webserver_type')}"
+    pia_webserver_host:         "%{hiera('pia_host_name')}"
+    pia_webserver_port:         "%{hiera('pia_http_port')}"
+    node_manager_port:          7500
+
+    webserver_settings:
+      webserver_type:           ohs
+      webserver_home:           "%{hiera('ohs_location')}"
+      webserver_admin_user:     system
+      webserver_admin_user_pwd: ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEASKv6kbCG/ASLb+rfDOc2ibHIgr6iqozsQeCMjp1yzF9c+exAm7Bckugbe2l+XYjpPuyqpdicWpGOU5DOHT9BjXBTZnJEtBxKnmv18rUhKHWTuw0bRJN6cXqBZJv3kXqWsvqjFmcU3Qp4Yp2WKOBUBZjy6CZAZ0IfA+UgSwIuNAO609PTmt1Q/AIReFJt+ejTIzp2RhouJCGZVeU4qTtSKoqK58YFxyZ4UkBVbH5TcuDi/B4LXAb/2/3We58C2rMuwQovYyjqs+SMl5Yax7OLxqtEUk45HNox49PnEoQLIrAoI86NhEWdymTLboBdNNc0ePexSy3r5aRETUzfJAMsCTA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBDN4+zMD4LKPItlG0TBsUk6gBAN3v9tRRcRHm7Ym2DiGGmm]
+      webserver_admin_port:     7700
+      webserver_http_port:      7740
+      webserver_https_port:     7743
+
+component_preboot_setup_list:
+  web_profile:
+    run_control_id:                       webprofile
+    os_user:                              "%{hiera('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{hiera('db_name')}"
+      db_type:                            "%{hiera('db_platform')}"
+      db_opr_id:                          "%{hiera('db_user')}"
+      db_opr_pwd:                         "%{hiera('db_user_pwd')}"
+      db_connect_id:                      "%{hiera('db_connect_id')}"
+      db_connect_pwd:                     "%{hiera('db_connect_pwd')}"
+
+    acm_plugin_list:
+      PTWebProfileConfig:
+        env.webprofilename:               "%{hiera('pia_webprofile_name')}"
+        env.helpurl:                      "http://www.oracle.com/pls/topic/lookup?id=%CONTEXT_ID%&ctx=%{hiera('help_uri')}"
+        env.updateonlycustomproperty:     N
+        env.propertyname:                 EnablePNSubscriptions
+        env.validationtype:               1
+        env.longvalue:                    true
+
+  integration_broker:
+    run_control_id:                       intbroker
+    os_user:                              "%{hiera('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{hiera('db_name')}"
+      db_type:                            "%{hiera('db_platform')}"
+      db_opr_id:                          "%{hiera('db_user')}"
+      db_opr_pwd:                         "%{hiera('db_user_pwd')}"
+      db_connect_id:                      "%{hiera('db_connect_id')}"
+      db_connect_pwd:                     "%{hiera('db_connect_pwd')}"
+
+    acm_plugin_list:
+      PTIBRenameNode:
+        env.default_local_node:           "%{hiera('gateway_node_name')}"
+        env.app_msg_purge_all_dms:        true
+
+      PTIBConfigureDBNode:
+        env.pia_webserver_host:           "%{hiera('pia_host_name')}"
+        env.pia_webserver_port:           "%{hiera('pia_http_port')}"
+        env.pia_webserver_ssl_port:       "%{hiera('pia_https_port')}"
+        env.pia_site_name:                "%{hiera('pia_site_name')}"
+        env.gateway_host:                 "%{hiera('pia_host_name')}"
+        env.gateway_port:                 "%{hiera('pia_http_port')}"
+        env.gateway_ssl_port:             "%{hiera('pia_https_port')}"
+        env.use_ssl_gateway:              false
+        env.use_ssl_webserver:            false
+        env.default_user_id:              "%{hiera('db_user')}"
+        env.default_local_node_pass:      "%{hiera('db_user_pwd')}"
+        env.anonymous_default_user_id:    "%{hiera('db_user')}"
+        env.configure_wsdl_node:          false
+
+    acm_plugin_order:
+      - PTIBRenameNode
+      - PTIBConfigureDBNode
+
+  report_distribution:
+    run_control_id:                       reportdistribution
+    os_user:                              "%{hiera('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{hiera('db_name')}"
+      db_type:                            "%{hiera('db_platform')}"
+      db_opr_id:                          "%{hiera('db_user')}"
+      db_opr_pwd:                         "%{hiera('db_user_pwd')}"
+      db_connect_id:                      "%{hiera('db_connect_id')}"
+      db_connect_pwd:                     "%{hiera('db_connect_pwd')}"
+
+    acm_plugin_list:
+      PTProcessSchedulerReportNode:
+        env.distnodename:                 PRCS1028
+        env.opsys:                        4
+        env.uri_port:                     "%{hiera('pia_http_port')}"
+        env.uri_host:                     "%{hiera('pia_host_name')}"
+        env.uri_resource:                 "SchedulerTransfer/%{hiera('pia_site_name')}"
+        env.url:                          "http://%{hiera('pia_host_name')}:%{hiera('pia_http_port')}/psreports/%{hiera('pia_site_name')}"
+        env.cdm_proto:                    0
+
+      PTProcessSchedulerServerConfig:
+        env.servername:                   PRCS1028
+        env.distnodename:                 PRCS1028
+        env.heartbeat:                    60
+        env.sleeptime:                    15
+        env.distid:                       ACM Administrator
+        env.distidtype:                   3
+        env.prcstype:                     'Application Engine,Data Mover,Optimization Engine,SQR Process,SQR Report,COBOL SQL,XML Publisher,nVision-Report,nVision-ReportBook,PSJob'
+        env.prcscategory:                 Default,LOADCACHE
+        env.processtypepriority:          '5,5,5,5,5,5,5,5,5,5'
+        env.processtypemaxconcurrent:     '3,1,2,3,3,3,3,5,5,5'
+        env.maxconcurrent:                '5,2'
+        env.prcspriority:                 '5,5'
+        env.descr:                        Server Configured via ACM
+        env.transfermaxretry:             3
+        env.daemonprcsinst:               0
+        env.maxapiaware:                  5
+        env.transferinterval:             60
+        env.transferlogfiles:             1
+        env.daemonsleeptime:              0
+        env.daemoncyclecnt:               0
+        env.srvloadbaloptn:               1
+        env.redistwrkoption:              2
+        env.start_hours:                  '0,0,0,0,0,0,0'
+        env.start_minutes:                '0,0,0,0,0,0,0'
+        env.day_ofweek:                   '0,1,2,3,4,5,6'
+        env.end_hours:                    '23,23,23,23,23,23,23'
+        env.end_minutes:                  '59,59,59,59,59,59,59'
+
+    acm_plugin_order:
+      - PTProcessSchedulerReportNode
+      - PTProcessSchedulerServerConfig
+
+component_preboot_setup_order:
+  - web_profile
+  - integration_broker
+  - report_distribution
+
+component_postboot_setup_list:
+  integration_broker:
+    run_control_id:                       intbroker
+    os_user:                              "%{hiera('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{hiera('db_name')}"
+      db_type:                            "%{hiera('db_platform')}"
+      db_opr_id:                          "%{hiera('db_user')}"
+      db_opr_pwd:                         "%{hiera('db_user_pwd')}"
+      db_connect_id:                      "%{hiera('db_connect_id')}"
+      db_connect_pwd:                     "%{hiera('db_connect_pwd')}"
+
+    acm_plugin_list:
+      PTIBActivateDomain:
+        domain.activate_retry_count:      10
+        domain.activate_wait_time:        10
+
+      PTIBConfigureGatewayNodes:
+        env.gateway_host:                 "%{hiera('pia_host_name')}"
+        env.gateway_port:                 "%{hiera('pia_http_port')}"
+        env.gateway_ssl_port:             "%{hiera('pia_https_port')}"
+        env.use_ssl_gateway:              false
+        env.default_local_node:           "%{hiera('gateway_node_name')}"
+        env.gateway_user:                 "%{hiera('pia_gateway_user')}"
+        env.gateway_password:             "%{hiera('pia_gateway_user_pwd')}"
+        env.ib_appserver_host:            "%{hiera('pia_host_name')}"
+        env.ib_jolt_port:                 "%{hiera('jolt_port')}"
+        env.ib_node_proxy_userid:         "%{hiera('db_user')}"
+        env.ib_node_proxy_password:       "%{hiera('db_user_pwd')}"
+        env.tools_release:                "%ToolsRelease"
+        env.ib_appserver_domain_password: "%{hiera('domain_conn_pwd')}"
+        env.ib_set_as_default_node:       true
+
+      PTIBConfigureGatewayProperties:
+        env.gateway_keystore_password:    password
+        
+      PTWebServerConfigUpdate:
+        env.domainname:                   "%{hiera('pia_domain_name')}"
+        env.sitename:                     "%{hiera('pia_site_name')}"
+        env.piahome:                      "%{hiera('ps_config_home')}"
+        env.psserver:                     ""
+        env.KeyStorePwd:                  ""
+
+    acm_plugin_order:
+      - PTIBActivateDomain
+      - PTIBConfigureGatewayNodes
+      - PTIBConfigureGatewayProperties
+      - PTWebServerConfigUpdate

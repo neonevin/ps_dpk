@@ -1,0 +1,105 @@
+---
+psft_runtime_group_name:     psft
+psft_app_install_group_name: appinst
+oracle_install_group_name:   oinstall
+oracle_runtime_group_name:   dbas
+
+groups:
+  psft_runtime_group:
+    name:     "%{hiera('psft_runtime_group_name')}"
+  app_install_group:
+    name:     "%{hiera('psft_app_install_group_name')}"
+  oracle_install_group:
+    name:     "%{hiera('oracle_install_group_name')}"
+    remove:   false
+  oracle_runtime_group:
+    name:     "%{hiera('oracle_runtime_group_name')}"
+    remove:   false
+
+psft_user_pwd:   0radmin
+oracle_user_pwd: oracle
+user_home_dir:   /home
+
+psft_install_user_name:     psadm1
+psft_runtime_user_name:     psadm5
+psft_app_install_user_name: psadm3
+oracle_user_name:           oracle2
+psft_es_user_name:          esadm1
+
+users:
+  tools_install_user:
+    name:     "%{hiera('psft_install_user_name')}"
+    gid:      "%{hiera('oracle_install_group_name')}"
+    groups:   "%{hiera('psft_runtime_group_name')}"
+    expiry:   absent
+    home_dir: "%{hiera('user_home_dir')}/%{hiera('psft_install_user_name')}"
+    password: "%{hiera('psft_user_pwd')}"
+  psft_runtime_user:
+    name:     "%{hiera('psft_runtime_user_name')}"
+    gid:      "%{hiera('oracle_install_group_name')}"
+    groups:   "%{hiera('psft_runtime_group_name')}"
+    expiry:   absent
+    home_dir: "%{hiera('user_home_dir')}/%{hiera('psft_runtime_user_name')}"
+    password: "%{hiera('psft_user_pwd')}"
+  app_install_user:
+    name:     "%{hiera('psft_app_install_user_name')}"
+    gid:      "%{hiera('psft_app_install_group_name')}"
+    groups:   "%{hiera('psft_runtime_group_name')}"
+    expiry:   absent
+    home_dir: "%{hiera('user_home_dir')}/%{hiera('psft_app_install_user_name')}"
+    password: "%{hiera('psft_user_pwd')}"
+  oracle_user:
+    name:     "%{hiera('oracle_user_name')}"
+    gid:      "%{hiera('oracle_install_group_name')}"
+    groups:   "%{hiera('oracle_runtime_group_name')}"
+    expiry:   absent
+    home_dir: "%{hiera('user_home_dir')}/%{hiera('oracle_user_name')}"
+    password: "%{hiera('oracle_user_pwd')}"
+  es_user:
+    name:     "%{hiera('psft_es_user_name')}"
+    gid:      "%{hiera('oracle_install_group_name')}"
+    groups:   "%{hiera('psft_runtime_group_name')}"
+    expiry:   absent
+    home_dir: "%{hiera('user_home_dir')}/%{hiera('psft_es_user_name')}"
+    password: "%{hiera('psft_user_pwd')}"
+
+
+setup_samba:    true 
+setup_sysctl:    true
+setup_services:  true
+
+services_lock_dir: '/var/lock/subsys'
+sysctl:
+    kernel.msgmnb:                65538
+    kernel.msgmni:                1024
+    kernel.msgmax:                65536
+    kernel.shmmax:                68719476736
+    kernel.shmall:                4294967296
+    kernel.core_uses_pid:         1
+    net.ipv4.tcp_keepalive_time:  90
+    net.ipv4.tcp_timestamps:      1
+    net.ipv4.tcp_window_scaling:  1
+    net.ipv4.ip_local_port_range: '10000 65500'
+
+ulimit:
+  group:
+    hard.nofile:  65536
+    soft.nofile:  65536
+    hard.nproc:   65536
+    soft.nproc:   65536
+    hard.core:    unlimited
+    soft.core:    unlimited
+    hard.memlock: 500000
+    soft.memlock: 500000
+    hard.stack:   102400
+    soft.stack:   102400
+
+  user:
+    hard.nofile:  131072
+    soft.nofile:  131072
+    hard.nproc:   131072
+    soft.nproc:   131072
+    hard.core:    unlimited
+    soft.core:    unlimited
+    hard.memlock: 500000
+    soft.memlock: 500000

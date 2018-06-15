@@ -1,0 +1,415 @@
+---
+user_home_dir:   /var/opt
+
+psft_install_user_name:     psoft
+psft_app_type: fs
+
+users:
+  psft_user:
+    name:     "%{lookup('psft_install_user_name')}"
+    gid:      psoft
+    home_dir: "%{lookup('user_home_dir')}/%{lookup('psft_install_user_name')}"
+    ensure: absent
+    remove: false
+
+setup_samba:     false
+setup_sysctl:    true
+setup_services:  false
+
+peoplesoft_base: "/psoft/oracle/psoft/%{lookup('psft_app_type')}"
+dpk_location:     /psoft/share/dpk
+archive_location: "%{lookup('dpk_location')}/archives/build_05062018"
+db_location:      /psoft/oracle/db/
+db_platform:      ORACLE
+setup_ohs:        false
+
+pt_location: "%{lookup('peoplesoft_base')}/ps_homes"
+weblogic_base: /psoft/oracle/weblogic
+tuxedo_base: /psoft/oracle/tuxedo
+java_base: /psoft/oracle/java
+app_home_base: "%{lookup('peoplesoft_base')}/app_homes"
+
+
+
+
+ps_home_location:       "%{lookup('pt_location')}/pt856.08"
+jdk_location:           "%{lookup('java_base')}/jdk1.8.0_162"
+weblogic_location:      "%{lookup('weblogic_base')}/wl12.2.1.3"
+tuxedo_location:        "%{lookup('tuxedo_base')}/tux12.2.2"
+oracle_client_location: /var/psoft/oracle/db/client/12.2
+log_home_base:          "%{lookup('peoplesoft_base')}/log_homes"
+
+ps_home:
+  db_type:    "%{lookup('db_platform')}"
+  unicode_db: "%{lookup('unicode_db')}"
+  location:   "%{lookup('ps_home_location')}"
+
+inventory:
+  location: "%{lookup('inventory_location')}"
+
+oracle_client:
+  location: "%{lookup('oracle_client_location')}"
+  ensure: present
+
+
+oracle_server:
+  ensure: absent
+  remove: false
+
+jdk:
+  location: "%{lookup('jdk_location')}"
+  ensure: present
+
+weblogic:
+  location: "%{lookup('weblogic_location')}"
+  ensure: present
+
+tuxedo:
+  location: "%{lookup('tuxedo_location')}"
+  ensure: present
+  
+ohs:
+  location: "%{lookup('ohs_location')}"
+
+
+ps_apphome_location: "%{lookup('app_home_base')}/fs92.27"
+ps_app_home:
+  db_type: "%{lookup('db_platform')}"
+  include_ml_files: false
+  location: "%{lookup('ps_apphome_location')}"
+pi_home_location: "%{lookup('app_home_base')}/fs92.27_pi_home"
+pi_home:
+  location: "%{lookup('pi_home_location')}"
+  ensure: absent
+
+db_name:           FS92DEVA
+environment_name: fs92beta
+db_user:           PSAPPS
+db_user_pwd:       ufgapas
+
+db_connect_id:     people
+db_connect_pwd:    snapper
+
+change_password:          false
+access_id:          psoft
+access_pwd:          fr33hand
+db_admin_pwd:          Password123
+
+domain_user:           "%{lookup('psft_install_user_name')}"
+ps_config_home:        "/var/psoft/oracle/psoft_config/fs/%{lookup('environment_name')}"
+appserver_template:    small
+appserver_domain_name: "%{lookup('environment_name')}"
+prcs_domain_name:      "%{lookup('environment_name')}"
+prcs_domain_id:        "PRCS%{::rand}"
+report_node_name:      PSREPORTS
+pia_domain_name:       peoplesoft
+pia_site_name:         ps
+pia_http_port:         9100
+pia_https_port:        9001
+jolt_port:             10010
+wsl_port:              7010
+db_port:               1521
+gateway_node_name:     PSFT_EP
+pia_gateway_user:      administrator
+pia_gateway_user_pwd:  Passw0rd
+webserver_type:        weblogic
+pia_webprofile_name:   PROD
+pia_psserver_list:     "%{::fqdn}:%{lookup('jolt_port')}"
+report_repository_dir: "%{lookup('ps_config_home')}/psreports"
+
+domain_conn_pwd:       PS
+pia_host_name:         "%{::fqdn}"
+db_host_name:          "%{::fqdn}"
+db_is_rac:             false
+db_service_name:       "%{lookup('db_name')}.SOE.UQ.EDU.AU"
+help_uri:              pt854pbh1
+tns_dir:               "%{lookup('db_location')}/tns_admin"
+tns_admin_list:
+  "%{lookup('db_name')}":
+    db_host:         "CMAN1.SOE.UQ.EDU.AU"
+    db_port:         "%{lookup('db_port')}"
+    db_protocol:     TCP
+    db_service_name: "%{lookup('db_service_name')}"
+
+
+appserver_domain_list:
+  "%{lookup('appserver_domain_name')}":
+    os_user:         "%{lookup('domain_user')}"
+    ps_cfg_home_dir: "%{lookup('ps_config_home')}"
+    template_type:   "%{lookup('appserver_template')}"
+    recreate: true
+
+    db_settings:
+      db_name:        "%{lookup('db_name')}"
+      db_type:        "%{lookup('db_platform')}"
+      db_opr_id:      "%{lookup('db_user')}"
+      db_opr_pwd:     "%{lookup('db_user_pwd')}"
+      db_connect_id:  "%{lookup('db_connect_id')}"
+      db_connect_pwd: "%{lookup('db_connect_pwd')}"
+
+    config_settings:
+      Domain Settings/Domain ID:    "%{lookup('appserver_domain_name')}"
+      Domain Settings/Log Directory: "%{lookup('log_home_base')}/%{lookup(environment_name)}"
+      PSAPPSRV/Min Instances:       2
+      PSAPPSRV/Max Instances:       3
+      PSAPPSRV/Max Fetch Size:      15000
+      Security/DomainConnectionPwd: "%{lookup('domain_conn_pwd')}"
+      JOLT Listener/Port:           "%{lookup('jolt_port')}"
+      JOLT Listener/Address:        0.0.0.0 
+      Workstation Listener/Port:    "%{lookup('wsl_port')}"
+
+    feature_settings:
+      PUBSUB:        "Yes"
+      QUICKSRV:      "No"
+      QUERYSRV:      "No"
+      JOLT:          "Yes"
+      JRAD:          "No"
+      WSL:           "No"
+      DBGSRV:        "No"
+      RENSRV:        "No"
+      MCF:           "No"
+      PPM:           "Yes"
+      PSPPMSRV:      "Yes"
+      ANALYTICSRV:   "No"
+      SERVER_EVENTS: "Yes"
+      DOMAIN_GW:     "No"
+
+prcs_domain_list:
+  "%{lookup('prcs_domain_name')}":
+    os_user:         "%{lookup('domain_user')}"
+    ps_cfg_home_dir: "%{lookup('ps_config_home')}"
+    recreate: true
+
+    db_settings:
+      db_name:        "%{lookup('db_name')}"
+      db_type:        "%{lookup('db_platform')}"
+      db_opr_id:      "%{lookup('db_user')}"
+      db_opr_pwd:     "%{lookup('db_user_pwd')}"
+      db_connect_id:  "%{lookup('db_connect_id')}"
+      db_connect_pwd: "%{lookup('db_connect_pwd')}"
+
+    config_settings:
+      Process Scheduler/PrcsServerName: "%{lookup('prcs_domain_id')}"
+      Security/DomainConnectionPwd:     "%{lookup('domain_conn_pwd')}"
+      Domain Settings/Log Directory: "%{lookup('log_home_base')}/%{lookup(environment_name)}"
+
+    feature_settings:
+      MSTRSRV:      "Yes"
+      APPENG:       "Yes"
+
+pia_domain_list:
+  "%{lookup('pia_domain_name')}":
+    os_user:               "%{lookup('domain_user')}"
+    ps_cfg_home_dir:       "%{lookup('ps_config_home')}"
+    gateway_user:          "%{lookup('pia_gateway_user')}"
+    gateway_user_pwd:      "%{lookup('pia_gateway_user_pwd')}"
+    auth_token_domain:     ".%{::domain}"
+    redeploy: true
+
+    webserver_settings:
+      webserver_type:           "%{lookup('webserver_type')}"
+      webserver_home:           "%{lookup('weblogic_location')}"
+      webserver_admin_user:     system
+      webserver_admin_user_pwd: Sysadm123
+      webserver_admin_port:     "%{lookup('pia_http_port')}"
+      webserver_http_port:      "%{lookup('pia_http_port')}"
+      webserver_https_port:     "%{lookup('pia_https_port')}"
+
+    site_list:
+      "%{lookup('pia_site_name')}":
+        appserver_connections: "%{lookup('pia_psserver_list')}"
+        domain_conn_pwd:       "%{lookup('domain_conn_pwd')}"
+
+        webprofile_settings:
+          profile_name:        "%{lookup('pia_webprofile_name')}"
+          profile_user:        PTWEBSERVER
+          profile_user_pwd:    PTWEBSERVER
+
+        report_repository_dir: "%{lookup('report_repository_dir')}"
+
+ohs_domain:
+    name:                       ohsdom
+    os_user:                    "%{lookup('domain_user')}"
+    domain_home_dir:            "%{lookup('ps_config_home')}"
+    pia_webserver_type:         "%{lookup('webserver_type')}"
+    pia_webserver_host:         "%{lookup('pia_host_name')}"
+    pia_webserver_port:         "%{lookup('pia_http_port')}"
+    node_manager_port:          7500
+
+    webserver_settings:
+      webserver_type:           ohs
+      webserver_home:           "%{lookup('ohs_location')}"
+      webserver_admin_user:     system
+      webserver_admin_user_pwd: <OHS_ADMIN_PWD>
+      webserver_admin_port:     7700
+      webserver_http_port:      7740
+      webserver_https_port:     7743
+
+component_preboot_setup_list:
+  web_profile:
+    run_control_id:                       webprofile
+    os_user:                              "%{lookup('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{lookup('db_name')}"
+      db_type:                            "%{lookup('db_platform')}"
+      db_opr_id:                          "%{lookup('db_user')}"
+      db_opr_pwd:                         "%{lookup('db_user_pwd')}"
+      db_connect_id:                      "%{lookup('db_connect_id')}"
+      db_connect_pwd:                     "%{lookup('db_connect_pwd')}"
+
+    acm_plugin_list:
+      PTWebProfileConfig:
+        env.webprofilename:               "%{lookup('pia_webprofile_name')}"
+        env.helpurl:                      "http://www.oracle.com/pls/topic/lookup?id=%CONTEXT_ID%&ctx=%{lookup('help_uri')}"
+        env.updateonlycustomproperty:     N
+        env.propertyname:                 EnablePNSubscriptions
+        env.validationtype:               1
+        env.longvalue:                    true
+        env.connectinfo: Y
+
+  integration_broker:
+    run_control_id:                       intbroker
+    os_user:                              "%{lookup('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{lookup('db_name')}"
+      db_type:                            "%{lookup('db_platform')}"
+      db_opr_id:                          "%{lookup('db_user')}"
+      db_opr_pwd:                         "%{lookup('db_user_pwd')}"
+      db_connect_id:                      "%{lookup('db_connect_id')}"
+      db_connect_pwd:                     "%{lookup('db_connect_pwd')}"
+
+    acm_plugin_list:
+      PTIBRenameNode:
+        env.default_local_node:           "%{lookup('gateway_node_name')}"
+        env.app_msg_purge_all_dms:        true
+
+      PTIBConfigureDBNode:
+        env.pia_webserver_host:           "%{lookup('pia_host_name')}"
+        env.pia_webserver_port:           "%{lookup('pia_http_port')}"
+        env.pia_webserver_ssl_port:       "%{lookup('pia_https_port')}"
+        env.pia_site_name:                "%{lookup('pia_site_name')}"
+        env.gateway_host:                 "%{lookup('pia_host_name')}"
+        env.gateway_port:                 "%{lookup('pia_http_port')}"
+        env.gateway_ssl_port:             "%{lookup('pia_https_port')}"
+        env.use_ssl_gateway:              false
+        env.use_ssl_webserver:            false
+        env.default_user_id:              "%{lookup('db_user')}"
+        env.default_local_node_pass:      "%{lookup('db_user_pwd')}"
+        env.anonymous_default_user_id:    "%{lookup('db_user')}"
+        env.configure_wsdl_node:          false
+
+    acm_plugin_order:
+      - PTIBRenameNode
+      - PTIBConfigureDBNode
+
+  report_distribution:
+    run_control_id:                       reportdistribution
+    os_user:                              "%{lookup('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{lookup('db_name')}"
+      db_type:                            "%{lookup('db_platform')}"
+      db_opr_id:                          "%{lookup('db_user')}"
+      db_opr_pwd:                         "%{lookup('db_user_pwd')}"
+      db_connect_id:                      "%{lookup('db_connect_id')}"
+      db_connect_pwd:                     "%{lookup('db_connect_pwd')}"
+
+    acm_plugin_list:
+      PTProcessSchedulerReportNode:
+        env.distnodename:                 "%{lookup('report_node_name')}"
+        env.opsys:                        4
+        env.uri_port:                     "%{lookup('pia_http_port')}"
+        env.uri_host:                     "%{lookup('pia_host_name')}"
+        env.uri_resource:                 "SchedulerTransfer/%{lookup('pia_site_name')}"
+        env.url:                          "http://%{lookup('pia_host_name')}:%{lookup('pia_http_port')}/psreports/%{lookup('pia_site_name')}"
+        env.cdm_proto:                    0
+
+      PTProcessSchedulerServerConfig:
+        env.servername:                   "%{lookup('prcs_domain_id')}"
+        env.distnodename:                 "%{lookup('report_node_name')}"
+        env.heartbeat:                    60
+        env.sleeptime:                    15
+        env.distid:                       ACM Administrator
+        env.distidtype:                   3
+        env.prcstype:                     'Application Engine,Data Mover,Optimization Engine,SQR Process,SQR Report,COBOL SQL,XML Publisher,nVision-Report,nVision-ReportBook,PSJob'
+        env.prcscategory:                 Default,LOADCACHE
+        env.processtypepriority:          '5,5,5,5,5,5,5,5,5,5'
+        env.processtypemaxconcurrent:     '3,1,2,3,3,3,3,5,5,5'
+        env.maxconcurrent:                '5,2'
+        env.prcspriority:                 '5,5'
+        env.descr:                        Server Configured via ACM
+        env.transfermaxretry:             3
+        env.daemonprcsinst:               0
+        env.maxapiaware:                  5
+        env.transferinterval:             60
+        env.transferlogfiles:             1
+        env.daemonsleeptime:              0
+        env.daemoncyclecnt:               0
+        env.srvloadbaloptn:               1
+        env.redistwrkoption:              2
+        env.start_hours:                  '0,0,0,0,0,0,0'
+        env.start_minutes:                '0,0,0,0,0,0,0'
+        env.day_ofweek:                   '0,1,2,3,4,5,6'
+        env.end_hours:                    '23,23,23,23,23,23,23'
+        env.end_minutes:                  '59,59,59,59,59,59,59'
+
+    acm_plugin_order:
+      - PTProcessSchedulerReportNode
+      - PTProcessSchedulerServerConfig
+
+component_preboot_setup_order:
+  - web_profile
+  - integration_broker
+  - report_distribution
+
+component_postboot_setup_list:
+  integration_broker:
+    run_control_id:                       intbroker
+    os_user:                              "%{lookup('domain_user')}"
+
+    db_settings:
+      db_name:                            "%{lookup('db_name')}"
+      db_type:                            "%{lookup('db_platform')}"
+      db_opr_id:                          "%{lookup('db_user')}"
+      db_opr_pwd:                         "%{lookup('db_user_pwd')}"
+      db_connect_id:                      "%{lookup('db_connect_id')}"
+      db_connect_pwd:                     "%{lookup('db_connect_pwd')}"
+
+    acm_plugin_list:
+      PTIBActivateDomain:
+        domain.activate_retry_count:      10
+        domain.activate_wait_time:        10
+
+      PTIBConfigureGatewayNodes:
+        env.gateway_host:                 "%{lookup('pia_host_name')}"
+        env.gateway_port:                 "%{lookup('pia_http_port')}"
+        env.gateway_ssl_port:             "%{lookup('pia_https_port')}"
+        env.use_ssl_gateway:              false
+        env.default_local_node:           "%{lookup('gateway_node_name')}"
+        env.gateway_user:                 "%{lookup('pia_gateway_user')}"
+        env.gateway_password:             "%{lookup('pia_gateway_user_pwd')}"
+        env.ib_appserver_host:            "%{lookup('pia_host_name')}"
+        env.ib_jolt_port:                 "%{lookup('jolt_port')}"
+        env.ib_node_proxy_userid:         "%{lookup('db_user')}"
+        env.ib_node_proxy_password:       "%{lookup('db_user_pwd')}"
+        env.tools_release:                "%ToolsRelease"
+        env.ib_appserver_domain_password: "%{lookup('domain_conn_pwd')}"
+        env.ib_set_as_default_node:       true
+
+      PTIBConfigureGatewayProperties:
+        env.gateway_keystore_password:    password
+        
+      PTWebServerConfigUpdate:
+        env.domainname:                   "%{lookup('pia_domain_name')}"
+        env.sitename:                     "%{lookup('pia_site_name')}"
+        env.piahome:                      "%{lookup('ps_config_home')}"
+        env.psserver:                     ""
+        env.KeyStorePwd:                  ""
+
+    acm_plugin_order:
+      - PTIBActivateDomain
+      - PTIBConfigureGatewayNodes
+      - PTIBConfigureGatewayProperties
+      - PTWebServerConfigUpdate
