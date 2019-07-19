@@ -1,0 +1,18 @@
+{
+  "name": "UQNP-my_utils",
+  "version": "0.1.0",
+  "author": "Nevin Prasannan",
+  "summary": "utilities - common",
+  "license": "Apache-2.0",
+  "source": "GitLab",
+  "project_page": "Git Lab",
+  "issues_url": "Git Lab",
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 1.0.0"
+    }
+  ],
+  "data_provider": null
+}
+

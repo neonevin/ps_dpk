@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+export EDITOR=vi
+export PS1="\[\033]0;\u@\h: \w\007\]\[\033[33;44m\]\u\[\033[00m\]@\[\033[1;41m\]\h\[\033[00m\]:\w # "
+PS2='MORE>'
+PS4='>'
+set -o noclobber        # Prevents Deleting File using I/O Redirection
+export PAGER=less       # Adds | less when scrolling through text
+                        # export PS1='\[\033[1;44m\]\u\[\033[00m\]@\h:\w # '
+                        # PS1="\h:\w # "
+export PATH=$PATH:/opt/csw/bin:/psoft/local/bin
+HISTSIZE=
+HISTFILESIZE=
+
+# .bashrc
+
+me=`whoami | awk '{print $1}'`
+
+dsplynum=`[ -f /tmp/${me}.* ] && ls /tmp/${me}.* | sed 's/^.*\.//'`
+
+case ${dsplynum} in
+
+    0)
+    export DISPLAY=`cat /tmp/${me}.0` ;;
+    "")
+    printf "\033[33;44mDISPLAY not set.\033[0m\n" ;;
+    *)
+    /usr/bin/xauth merge /tmp/${me}.${dsplynum}
+    export DISPLAY=localhost:${dsplynum};;
+
+esac
+
+
+if [ "x$IS_PS_PLT" != "xY" ]; then
+        # Source global definitions
+        echo
+        <% if @ps_app_cfg_base_norm -%>
+         echo Environments available are:
+         cd <%= @ps_app_cfg_base_norm %>
+        <% else -%>
+         echo Environments available are:
+         cd /psoft/oracle/psoft_config
+        <% end -%>
+        echo
+        ls -1
+fi
