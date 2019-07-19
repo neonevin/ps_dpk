@@ -1,2 +1,2 @@
 # ps_dpk
-PeopleSoft DPK
+Additional modules for automation of PeopleSoft environment deployment.
