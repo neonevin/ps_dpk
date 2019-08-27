@@ -1,6 +1,6 @@
 # ***************************************************************
 # UQ - Nevin Prasannan - 15/01/2019
-# V 1.0 - This for managing configuration.properties for webservers ONLY
+# V 1.0 - This for managing configuration/integration.properties for webservers ONLY
 # ***************************************************************
 define my_cfg_man::my_psigw_prop (
   $ensure          = present,
